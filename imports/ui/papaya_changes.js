@@ -189,12 +189,15 @@ papaya.viewer.Viewer.prototype.drawViewer = function (force, skipUpdate) {
 
 };
 
-papaya.viewer.Viewer.prototype.convertScreenToImageCoordinateX = function (xLoc, screenSlice) {
-    return papaya.viewer.Viewer.validDimBounds((xLoc - screenSlice.finalTransform[0][2]) / screenSlice.finalTransform[0][0],
-        screenSlice.xDim);
-};
+// Uncomment the code below to have continuously moving planes, instead of always using the center of the voxels.
+// FIXME: This code is incorrect. The crossing of the planes is always shown half a voxel off in both directions.
 
-papaya.viewer.Viewer.prototype.convertScreenToImageCoordinateY = function (yLoc, screenSlice) {
-    return papaya.viewer.Viewer.validDimBounds((yLoc - screenSlice.finalTransform[1][2]) / screenSlice.finalTransform[1][1],
-        screenSlice.yDim);
-};
+// papaya.viewer.Viewer.prototype.convertScreenToImageCoordinateX = function (xLoc, screenSlice) {
+//     return papaya.viewer.Viewer.validDimBounds((xLoc - screenSlice.finalTransform[0][2]) / screenSlice.finalTransform[0][0],
+//         screenSlice.xDim);
+// };
+
+// papaya.viewer.Viewer.prototype.convertScreenToImageCoordinateY = function (yLoc, screenSlice) {
+//     return papaya.viewer.Viewer.validDimBounds((yLoc - screenSlice.finalTransform[1][2]) / screenSlice.finalTransform[1][1],
+//         screenSlice.yDim);
+// };
