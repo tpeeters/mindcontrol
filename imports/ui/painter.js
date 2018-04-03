@@ -167,7 +167,6 @@ setContoursToZero = function(contours){
 }
 
 var annotate_point = function(template, originalCoord, screenCoor){
-            console.log("annotate_point(", originalCoord, ", ", screenCoor, ")")
             var viewer = papayaContainers[0].viewer
             var points = template.loggedPoints.get()
             if (points == null){
@@ -176,15 +175,6 @@ var annotate_point = function(template, originalCoord, screenCoor){
 
             var world = new papaya.core.Coordinate();
             papayaContainers[0].viewer.getWorldCoordinateAtIndex(originalCoord.x, originalCoord.y, originalCoord.z, world);
-            console.log("world coord = ", world)
-
-            ///////// TIM
-            var imageCoord = papayaContainers[0].viewer.convertScreenToImageCoordinate(screenCoor.x, screenCoor.y);
-            var worldCoord = new papaya.core.Coordinate();
-            papayaContainers[0].viewer.getWorldCoordinateAtIndex(imageCoord.x, imageCoord.y, imageCoord.z, worldCoord);
-            console.log("image coord = ", imageCoord, " world coord = ", worldCoord);
-          
-            ///////// TIM
 
             var entry = {matrix_coor: originalCoord, world_coor: world, checkedBy: Meteor.user().username, uuid: guid()}
             points.push(entry)
@@ -193,7 +183,10 @@ var annotate_point = function(template, originalCoord, screenCoor){
             //var viewer = papayaContainers[0].viewer
 
             // draw_point(screenCoor, viewer, pointColor, 5)
+            // We do not want to draw the coord where the user clicked, but where the new point was added.
+            //  So we re-draw the whole view, not just add the point.
             papaya.viewer.Viewer.prototype.drawViewer(true, true)
+
             //var points = get_stuff_of_user(template, "loggedPoints")
             send_to_peers({"action": "insert", "data":{"loggedPoints": entry}})
 }
@@ -438,11 +431,7 @@ logpoint = function(e, template, type){
 
     var viewer = papayaContainers[0].viewer
 
-    console.log("logpoint. shiftkey = ", e.shiftKey, ", mode = ", template.logMode.get(), "type = ", type)
-
-    if (e.shiftKey) {
-        console.log("bla")
-    // if((e.shiftKey || template.touchscreen.get()) && e.altKey == false ){
+    if((e.shiftKey || template.touchscreen.get()) && e.altKey == false ){
 
         var currentCoor = papayaContainers[0].viewer.cursorPosition
         var originalCoord = new papaya.core.Coordinate(currentCoor.x, currentCoor.y, currentCoor.z)
@@ -451,6 +440,8 @@ logpoint = function(e, template, type){
         var mode = template.logMode.get()
 
         // if ( mode == "point" && type=="click"){
+        // Add the point where the presses the button (type mousedown, not click), to avoid confusion when the user
+        //  presses the button, then moves the cursor, then releases.
         if ( mode == "point" && type=="mousedown"){
             console.log("clicked point")
             annotate_point(template, originalCoord, screenCoor)
