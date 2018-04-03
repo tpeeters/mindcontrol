@@ -184,7 +184,7 @@ var annotate_point = function(template, originalCoord, screenCoor){
 
             // draw_point(screenCoor, viewer, pointColor, 5)
             // We do not want to draw the coord where the user clicked, but where the new point was added.
-            //  So we re-draw the whole view, not just add the point.
+            //  So we re-draw the whole view, not just the added point.
             papaya.viewer.Viewer.prototype.drawViewer(true, true)
 
             //var points = get_stuff_of_user(template, "loggedPoints")
@@ -443,7 +443,6 @@ logpoint = function(e, template, type){
         // Add the point where the presses the button (type mousedown, not click), to avoid confusion when the user
         //  presses the button, then moves the cursor, then releases.
         if ( mode == "point" && type=="mousedown"){
-            console.log("clicked point")
             annotate_point(template, originalCoord, screenCoor)
         }
 

@@ -796,9 +796,10 @@ Template.view_images.events({
  "click .goto_coor": function(event, template){
      //console.log("clicked a coordinate", this, this.matrix_coor)
      papayaContainers[0].viewer.gotoCoordinate(this.matrix_coor)
-     var screenCoor = papayaContainers[0].viewer.convertCoordinateToScreen(this.matrix_coor);
-     var viewer = papayaContainers[0].viewer
-     draw_point(screenCoor, viewer, pointColor, 5)
+    // Do not draw the point. It is already drawn in the scene.
+    //  var screenCoor = papayaContainers[0].viewer.convertCoordinateToScreen(this.matrix_coor);
+    //  var viewer = papayaContainers[0].viewer
+    //  draw_point(screenCoor, viewer, pointColor, 5)
      //fill_all(template)
  },
  "click .goto_cont": function(event, template){
